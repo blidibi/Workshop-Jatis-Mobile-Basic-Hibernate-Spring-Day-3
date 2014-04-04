@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          classpath:spring-beans-3.0.xsd
+          http://www.springframework.org/schema/context 
+          classpath:spring-context-3.0.xsd
+          http://www.springframework.org/schema/tx 
+          classpath:spring-tx-3.0.xsd">
+    <context:component-scan base-package="com.jatismobile.workshop"></context:component-scan>
+    <context:annotation-config/>
+    <tx:annotation-driven/> 
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->      
+    
+
+    <bean class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" id="dataSource">
+        <property name="user" value="root"/>
+        <property name="password" value=""/>
+        <property name="databaseName" value="workshop_jatismobile"/>
+        <property name="serverName" value="localhost"/>
+        <property name="portNumber" value="3306"/>
+    </bean>
+    
+<!--    <bean class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" id="sessionFactory">
+        <property name="packagesToScan" value="com.jatismobile.workshop.model"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+    </bean>-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" 
+        p:dataSource-ref="dataSource"
+        p:configLocation="classpath:hibernate.cfg.xml"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactory"/>    
+</beans>
